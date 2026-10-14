@@ -1,0 +1,8 @@
+node_modules/
+__pycache__/
+*.pyc
+tmp/
+projetos/
+promo/build/
+promo/output/
+*.codex.log

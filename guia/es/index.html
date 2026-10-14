@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>imovelfilme — del enlace del anuncio a la película del inmueble</title>
+<meta name="description" content="Herramienta gratuita que convierte el enlace de un anuncio de inmueble en un video de promoción: fotos profesionales, decoración virtual y película lista con música.">
+<link rel="alternate" hreflang="pt-BR" href="https://inematds.github.io/imovelfilme/guia/">
+<link rel="alternate" hreflang="en" href="https://inematds.github.io/imovelfilme/guia/en/">
+<link rel="alternate" hreflang="es" href="https://inematds.github.io/imovelfilme/guia/es/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0c0c10; --bg2:#14141b; --card:#16161e; --line:#272730;
+    --txt:#e9e9ee; --mut:#9a9aa6; --amb:#E2A23B; --amb2:#f0c070; --sky:#38bdf8; --pro:#cbd5e1;
+    color-scheme:dark;
+  }
+  body.light{
+    --bg:#f6f7f9; --bg2:#eceef2; --card:#ffffff; --line:#e1e3ea;
+    --txt:#1a1a22; --mut:#5b5b68; --amb:#b9791d; --amb2:#a16207; --sky:#0369a1; --pro:#b45309;
+    color-scheme:light;
+  }
+  body.light .hero .glow{opacity:.5}
+  body.light pre{background:#0e0e14;color:#d6d6e0}
+  body.light pre .c{color:#8a8a98}
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--txt);font:16px/1.65 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  h1,h2,h3{font-family:Sora,sans-serif;line-height:1.15;margin:0}
+  a{color:var(--amb);text-decoration:none}
+  code,pre{font-family:"JetBrains Mono",monospace}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 22px}
+  .mut{color:var(--mut)} .amb{color:var(--amb)}
+  .chip{display:inline-block;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--amb);font-weight:600;font-family:Sora}
+  nav{position:sticky;top:0;z-index:30;backdrop-filter:blur(12px);background:rgba(12,12,16,.78);border-bottom:1px solid var(--line)}
+  nav .wrap{display:flex;align-items:center;gap:22px;height:60px}
+  nav .brand{display:flex;align-items:center;gap:8px;font-family:Sora;font-weight:800;letter-spacing:-.02em;color:var(--amb)}
+  nav .brand .emoji{font-size:1.25rem}
+  nav .sep{color:var(--mut);opacity:.45}
+  nav .inema{color:var(--sky);font-weight:600;font-size:.88rem;font-family:Sora}
+  nav .inema:hover{filter:brightness(1.15)}
+  nav .pro{color:var(--pro);font-weight:600;font-size:.88rem;font-family:Sora}
+  nav .pro:hover{filter:brightness(1.15)}
+  nav .clubpro{display:inline-flex;align-items:center;gap:6px}
+  nav .links{margin-left:auto;display:flex;align-items:center;gap:20px;font-size:.92rem}
+  nav .links a.sec{color:var(--mut)} nav .links a.sec:hover{color:var(--txt)}
+  .lang{display:inline-flex;gap:2px;font-family:Sora;font-size:.78rem}
+  .lang a{color:var(--mut);padding:.2em .45em;border-radius:6px} .lang a.on{color:var(--amb);background:rgba(226,162,59,.12)}
+  .tgl{background:var(--bg2);border:1px solid var(--line);color:var(--txt);width:38px;height:38px;border-radius:10px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:1.05rem}
+  .tgl:hover{border-color:var(--amb)}
+  .btn{display:inline-block;background:var(--amb);color:#1a1206;font-weight:600;padding:.6em 1.05em;border-radius:10px;font-family:Sora}
+  .btn.ghost{background:transparent;color:var(--txt);border:1px solid var(--line)}
+  @media(max-width:760px){nav .links a.sec{display:none}}
+  @media(max-width:1100px){nav .links a.sec{display:none}} /* 4 seções + seletor + GitHub não cabem abaixo disso */
+  @media(max-width:520px){nav .wrap{gap:8px;padding:8px 14px;height:auto;flex-wrap:wrap} nav .links{gap:8px;margin-left:0;width:100%;justify-content:space-between} nav .btn{padding:.45em .7em;font-size:.82rem} .tgl{width:34px;height:34px}}
+  .hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+  .hero .glow{position:absolute;inset:-40% -20% auto auto;width:70%;height:600px;background:radial-gradient(closest-side,rgba(226,162,59,.22),transparent 70%);pointer-events:none}
+  .hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding:74px 22px}
+  .hero h1{font-size:clamp(2.2rem,5vw,3.5rem);font-weight:800;letter-spacing:-.025em}
+  .hero p.lead{font-size:1.18rem;color:var(--mut);margin:1.1em 0 1.6em;max-width:34ch}
+  .hero .cta{display:flex;gap:12px;flex-wrap:wrap}
+  .hero figure{margin:0;border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:0 30px 80px -30px #000}
+  .hero figure img{width:100%;display:block}
+  .resumo{padding:38px 0 34px;border-bottom:1px solid var(--line)}
+  .resumo p{font-size:1.12rem;line-height:1.7;max-width:74ch;margin:.55em 0 0}
+  @media(max-width:780px){.hero .wrap{grid-template-columns:1fr;padding:48px 22px}}
+  section{padding:62px 0;border-bottom:1px solid var(--line)}
+  section h2{font-size:clamp(1.5rem,3.4vw,2.1rem);font-weight:800;letter-spacing:-.02em}
+  section .sub{color:var(--mut);margin:.6em 0 2em;max-width:62ch}
+  .grid{display:grid;gap:16px}
+  .g3{grid-template-columns:repeat(3,1fr)} .g4{grid-template-columns:repeat(4,1fr)} .g2{grid-template-columns:repeat(2,1fr)}
+  @media(max-width:820px){.g3,.g4{grid-template-columns:1fr 1fr}}
+  @media(max-width:540px){.g2,.g3,.g4{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+  .card h3{font-size:1.05rem;margin-bottom:.4em}
+  .card p{color:var(--mut);font-size:.92rem;margin:0}
+  .num{display:inline-flex;width:30px;height:30px;align-items:center;justify-content:center;border-radius:8px;background:rgba(226,162,59,.14);color:var(--amb);font-family:Sora;font-weight:800;font-size:.9rem;margin-bottom:.7em}
+  .flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
+  .flow span{background:var(--bg2);border:1px solid var(--line);border-radius:999px;padding:.45em .9em;font-size:.85rem;font-family:Sora;font-weight:600}
+  .flow .arr{color:var(--amb);border:none;background:none;padding:0 .1em}
+  pre{background:#0a0a0e;border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;font-size:.86rem;line-height:1.6;color:#d6d6e0}
+  pre .c{color:#6f6f7c} pre .k{color:var(--amb2)} pre .s{color:#9ece6a}
+  .step{display:grid;grid-template-columns:46px minmax(0,1fr);gap:16px;margin-bottom:26px}
+  .step>div,.card{min-width:0}
+  p code,li code,td code{overflow-wrap:anywhere}
+  .step .b{width:46px;height:46px;border-radius:12px;background:var(--amb);color:#1a1206;font-family:Sora;font-weight:800;font-size:1.25rem;display:flex;align-items:center;justify-content:center}
+  .step h3{font-size:1.12rem;margin-bottom:.3em}
+  .step p{color:var(--mut);margin:.2em 0 .7em}
+  .ex{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:680px){.ex{grid-template-columns:1fr}}
+  .ex figure{margin:0;border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+  .ex figure img{width:100%;display:block}
+  .ex figcaption{padding:12px 14px;font-size:.88rem;color:var(--mut);background:var(--card)}
+  .phase{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--line)}
+  .phase:last-child{border:none}
+  .phase .tag{flex:0 0 92px;font-family:Sora;font-weight:800;color:var(--amb)}
+  .phase .d strong{display:block;margin-bottom:.2em}
+  .phase .d span{color:var(--mut);font-size:.92rem}
+  footer{padding:46px 0;text-align:center;color:var(--mut);font-size:.9rem}
+  .pill{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:.3em .8em;font-size:.78rem;color:var(--mut);margin:0 4px}
+</style>
+</head>
+<body>
+<nav><div class="wrap">
+  <a class="brand" href="#top"><span class="emoji">🏠</span> imovelfilme</a>
+  <span class="sep">|</span>
+  <span class="clubpro">
+    <a class="inema" href="https://inema.club" target="_blank" rel="noopener">INEMA.CLUB</a>
+    <span class="sep">-</span>
+    <a class="pro" href="https://inema.pro" target="_blank" rel="noopener">PRO</a>
+  </span>
+  <div class="links">
+    <a class="sec" href="#video">Video</a>
+    <a class="sec" href="#fluxo">Cómo funciona</a>
+    <a class="sec" href="#guia">Guía de uso</a>
+    <a class="sec" href="#exemplos">Ejemplos</a>
+    <span class="lang"><a href="../">PT</a><a href="../en/">EN</a><a class="on" href="./">ES</a></span>
+    <button class="tgl" id="themeToggle" aria-label="Cambiar tema" title="Cambiar tema">🌙</button>
+    <a class="btn" href="https://github.com/inematds/imovelfilme" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</div></nav>
+
+<header class="hero" id="top">
+  <div class="glow"></div>
+  <div class="wrap">
+    <div>
+      <span class="chip">Anuncio de inmueble → video de promoción</span>
+      <h1>Tu anuncio se vuelve <span class="amb">película</span></h1>
+      <p class="lead">Pega el enlace del anuncio. imovelfilme selecciona las mejores fotos, deja cada una con aspecto de fotógrafo profesional, decora los ambientes vacíos y entrega el video del inmueble listo, con precio, superficie y destacados animados.</p>
+      <div class="cta">
+        <a class="btn" href="#guia">Comenzar la guía</a>
+        <a class="btn ghost" href="#video">Ver el video</a>
+      </div>
+    </div>
+    <figure><img src="../assets/banner-es.jpg" alt="Tu anuncio se vuelve película: del enlace del anuncio a la película del inmueble"></figure>
+  </div>
+</header>
+
+<section id="resumo" class="resumo"><div class="wrap">
+  <span class="chip">En resumen</span>
+  <p>imovelfilme es una herramienta gratuita que convierte el anuncio de un inmueble en un video corto de promoción. Sirve para corredores, inmobiliarias o dueños que quieren publicar el inmueble en redes sin contratar fotógrafo ni editor. Tú indicas el enlace; la herramienta lee los datos que están en el anuncio, mejora las fotos, crea versiones decoradas de los ambientes y arma una película de 30 segundos con música. Necesita una computadora con Python, Node.js, FFmpeg y Codex con la sesión iniciada en tu suscripción.</p>
+</div></section>
+
+<section id="video"><div class="wrap">
+  <span class="chip">Ver el video</span>
+  <h2>Mira lo que hace</h2>
+  <p class="sub">A la izquierda, el video de presentación. A la derecha, la película que la herramienta entregó para un anuncio de demostración (inmueble ficticio, fotos generadas por IA).</p>
+  <div class="ex">
+    <figure><video controls preload="metadata" playsinline poster="../assets/promo-poster.jpg" style="width:100%;display:block"><source src="../assets/promo.mp4" type="video/mp4"></video><figcaption>Presentación de imovelfilme · 42 s</figcaption></figure>
+    <figure><video controls preload="metadata" playsinline poster="../assets/filme-poster.jpg" style="width:100%;display:block"><source src="../assets/filme-demo.mp4" type="video/mp4"></video><figcaption>Película generada para el anuncio de demostración · 29 s</figcaption></figure>
+  </div>
+</div></section>
+
+<section id="oque"><div class="wrap">
+  <span class="chip">Qué es</span>
+  <h2>Tres trabajos que se vuelven un comando</h2>
+  <p class="sub">Lo que antes requería fotógrafo, decorador y editor de video.</p>
+  <figure style="margin:0 0 26px;border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:0 30px 80px -30px #000"><img src="../assets/banner-grade-es.jpg" alt="Las seis etapas: enlace del anuncio, datos verificados, foto profesional, decoración virtual, brief del video, película lista" loading="lazy" style="width:100%;display:block"></figure>
+  <div class="grid g3">
+    <div class="card"><h3>📷 Foto profesional</h3><p>Cada foto del anuncio gana luz equilibrada, líneas rectas y nitidez. La casa sigue siendo la misma: pared, ventana y vista no cambian.</p></div>
+    <div class="card"><h3>🛋️ Decoración virtual</h3><p>Sala, cocina y dormitorios vacíos reciben muebles en el estilo que elijas. El video avisa al final que hay decoración virtual.</p></div>
+    <div class="card"><h3>🎬 Película lista</h3><p>Nombre, ubicación, precio, dormitorios y superficie entran como texto animado, con antes y después de los ambientes y música al volumen justo.</p></div>
+  </div>
+</div></section>
+
+<section id="fluxo"><div class="wrap">
+  <span class="chip">Cómo funciona</span>
+  <h2>Del enlace al MP4 en seis etapas</h2>
+  <p class="sub">Cada etapa guarda los archivos en una carpeta del inmueble. Puedes detenerte, revisar y continuar.</p>
+  <div class="flow">
+    <span>Enlace del anuncio</span><span class="arr">→</span>
+    <span>Datos verificados</span><span class="arr">→</span>
+    <span>Hasta 10 fotos</span><span class="arr">→</span>
+    <span>Foto profesional</span><span class="arr">→</span>
+    <span>Decoración virtual</span><span class="arr">→</span>
+    <span>Brief</span><span class="arr">→</span>
+    <span>Película MP4</span>
+  </div>
+  <div class="grid g3" style="margin-top:26px">
+    <div class="card"><h3>1. Leer el anuncio</h3><p>Lee los datos estructurados de la página (JSON-LD, og:, marcado) y el texto. Cada campo guarda de dónde vino. Lo que no está en el anuncio queda fuera.</p></div>
+    <div class="card"><h3>2. Fotos</h3><p>Elige hasta 10 fotos, una por ambiente antes de repetir (fachada, sala, cocina, suite, baño, balcón). Codex edita cada una con tu suscripción y el color se neutraliza.</p></div>
+    <div class="card"><h3>3. Película</h3><p>El brief separa de 4 a 8 datos fuertes. El video se arma en HTML y animación (HyperFrames) y se renderiza en MP4; la música se mezcla a −14 LUFS.</p></div>
+  </div>
+</div></section>
+
+<section id="pre"><div class="wrap">
+  <span class="chip">Requisitos previos</span>
+  <h2>Lo que debe estar instalado</h2>
+  <p class="sub">Todo corre en tu computadora. Ninguna clave de API.</p>
+  <div class="grid g3">
+    <div class="card"><h3>Python 3.10+ e Pillow</h3><p>Lee el anuncio, organiza las fotos y corrige el color.</p><pre><span class="k">python3 -m pip install pillow</span></pre></div>
+    <div class="card"><h3>Node.js 22+ e FFmpeg</h3><p>Renderizan el video (HyperFrames) y mezclan la música.</p><pre><span class="k">npm i</span>
+<span class="k">npx playwright install chromium</span></pre></div>
+    <div class="card"><h3>Codex CLI con sesión iniciada</h3><p>Hace la foto profesional y la decoración virtual con la generación de imágenes de tu suscripción.</p><pre><span class="k">npm i -g @openai/codex</span>
+<span class="k">codex login</span></pre></div>
+  </div>
+</div></section>
+
+<section id="guia"><div class="wrap">
+  <span class="chip">Guía de uso · paso a paso</span>
+  <h2>Haz la película de tu inmueble</h2>
+  <p class="sub">Usa fotos que puedas publicar: tuyas, de tu inmobiliaria o con autorización del dueño.</p>
+
+  <div class="step"><div class="b">1</div><div>
+    <h3>Descarga el proyecto</h3>
+    <p>Clona el repositorio e instala las dependencias del video.</p>
+<pre><span class="k">git clone https://github.com/inematds/imovelfilme</span>
+<span class="k">cd imovelfilme && npm i</span>
+<span class="k">python3 -m unittest discover -s tests</span>   <span class="c"># 9 pruebas, sin red y sin IA</span></pre>
+  </div></div>
+
+  <div class="step"><div class="b">2</div><div>
+    <h3>Lee el anuncio</h3>
+    <p>Pasa el enlace (o un .html guardado del anuncio) y una carpeta para el inmueble. Revisa lo que encontró en <code>imovel/anuncio.json</code>: cada campo trae su fuente en <code>_fontes</code>.</p>
+<pre><span class="k">python3 imovelfilme.py extrair</span> <span class="s">"https://seusite.com.br/imoveis/apto-1202"</span> --projeto ~/imoveis/apto1202
+<span class="c"># anuncio: Residencial ... · 6 fotos de 6 encontradas</span></pre>
+  </div></div>
+
+  <div class="step"><div class="b">3</div><div>
+    <h3>Elige el estilo y genera las fotos</h3>
+    <p>Mira los estilos listos o escribe el tuyo. La etapa es reanudable: si una foto falla, vuelve a ejecutarla y solo esa se rehace. Los nombres de estilo (como <code>praia-contemporaneo</code>, playa contemporáneo) son valores de la CLI y no se traducen.</p>
+<pre><span class="k">python3 imovelfilme.py estilos</span>
+<span class="k">python3 imovelfilme.py fotos</span> --projeto ~/imoveis/apto1202 --estilo praia-contemporaneo
+<span class="c"># fotos/profissional/ e fotos/decorada/</span></pre>
+  </div></div>
+
+  <div class="step"><div class="b">4</div><div>
+    <h3>Revisa el brief</h3>
+    <p>El brief lista lo que aparecerá escrito en el video. Edita <code>imovel/brief.json</code> si quieres quitar o cambiar algún dato.</p>
+<pre><span class="k">python3 imovelfilme.py brief</span> --projeto ~/imoveis/apto1202
+<span class="k">cat</span> ~/imoveis/apto1202/imovel/brief.md</pre>
+  </div></div>
+
+  <div class="step"><div class="b">5</div><div>
+    <h3>Renderiza la película</h3>
+    <p>Usa una música que puedas usar (el repositorio trae dos pistas propias en <code>assets/trilhas/</code>). Para Reels y Shorts, pide <code>--formato 9x16</code>.</p>
+<pre><span class="k">python3 imovelfilme.py video</span> --projeto ~/imoveis/apto1202 --trilha assets/trilhas/elegante.mp3
+<span class="c"># video: ~/imoveis/apto1202/output/filme-16x9.mp4</span></pre>
+  </div></div>
+
+  <div class="step"><div class="b">6</div><div>
+    <h3>Todo de una vez</h3>
+    <p>Para quien ya confía en el resultado: las cuatro etapas en secuencia.</p>
+<pre><span class="k">python3 imovelfilme.py tudo</span> <span class="s">"https://seusite.com.br/imoveis/apto-1202"</span> --projeto ~/imoveis/apto1202 \
+  --estilo luxo-moderno --trilha assets/trilhas/energia.mp3</pre>
+  </div></div>
+
+  <div class="step"><div class="b">7</div><div>
+    <h3>Úsalo como skill</h3>
+    <p>La carpeta <code>skill/imovelfilme</code> enseña a Claude Code o a Codex a ejecutar el flujo y a revisar el resultado. Cópiala a la carpeta de skills de tu agente.</p>
+<pre><span class="k">cp -r skill/imovelfilme ~/.claude/skills/</span>
+<span class="c"># después: "haz el video de este inmueble: &lt;enlace&gt;"</span></pre>
+  </div></div>
+</div></section>
+
+<section id="exemplos"><div class="wrap">
+  <span class="chip">Ejemplos</span>
+  <h2>Antes, profesional y decorada</h2>
+  <p class="sub">De izquierda a derecha: foto del celular, foto profesional y decoración virtual (estilo playa contemporáneo). Anuncio ficticio.</p>
+  <div class="ex">
+    <figure><img src="../assets/ex1.jpg" alt="Sala: foto del celular, versión profesional y versión decorada" loading="lazy"><figcaption>Sala con ventana al mar</figcaption></figure>
+    <figure><img src="../assets/ex2.jpg" alt="Suite: foto del celular, versión profesional y versión decorada" loading="lazy"><figcaption>Suite</figcaption></figure>
+  </div>
+</div></section>
+
+<section id="roadmap"><div class="wrap">
+  <span class="chip">Roadmap</span>
+  <h2>Lo que viene después</h2>
+  <p class="sub">La versión 1.0 cubre el camino completo. Posibles próximos pasos:</p>
+  <div class="phase"><div class="tag">1.0</div><div class="d"><strong>Hoy</strong><span>Lector genérico de anuncios, fotos con Codex, color neutro, brief, película 16:9 y 9:16 con música, skill y pruebas.</span></div></div>
+  <div class="phase"><div class="tag">Siguiente</div><div class="d"><strong>Portales grandes</strong><span>Lectores propios para portales que cargan las fotos por script (hoy: guarda la página y pasa el .html).</span></div></div>
+  <div class="phase"><div class="tag">Después</div><div class="d"><strong>Narración e idiomas</strong><span>Voz opcional que lee los destacados y textos del video en inglés y español.</span></div></div>
+</div></section>
+
+<footer>
+  <div class="wrap">
+    <div class="pill">Python</div><div class="pill">HyperFrames</div><div class="pill">Codex image_gen</div><div class="pill">FFmpeg</div>
+    <p style="margin-top:18px">imovelfilme · código abierto, MIT ·
+      <a href="https://github.com/inematds/imovelfilme">github.com/inematds/imovelfilme</a> ·
+      <a href="https://inema.club">INEMA.CLUB</a></p>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var KEY='imovelfilme-theme';
+    var b=document.body, t=document.getElementById('themeToggle');
+    if(localStorage.getItem(KEY)==='light'){ b.classList.add('light'); t.textContent='☀️'; }
+    t.addEventListener('click',function(){
+      var light=b.classList.toggle('light');
+      t.textContent=light?'☀️':'🌙';
+      localStorage.setItem(KEY, light?'light':'dark');
+    });
+  })();
+</script>
+</body>
+</html>
